@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import './LoginForm.css';
-import { IUser } from '../user.interface';
+import './WifiForm.css';
+import { IWifi } from './wifi.interface';
 
 export interface LoginFormProps {
-  login?: string;
+  ssid?: string;
   password?: string;
-  onLoggedIn?: (error?:Error,user?:IUser) => void;
+  onLoggedIn?: (error?:Error,user?:IWifi) => void;
 }
 
 
-function LoginForm(props : LoginFormProps){
+function WifiForm(props : LoginFormProps){
 
-  const  [login, setLogin] = useState<string>(props.login || '');
+  const  [ssid, setSsid] = useState<string>(props.ssid || '');
   const  [password, setPassword] = useState<string>(props.password || '');
 
   const handleInputChange = (state : React.Dispatch<React.SetStateAction<string>>) => {
@@ -24,9 +24,8 @@ function LoginForm(props : LoginFormProps){
     e.preventDefault();
     if(props.onLoggedIn){
       props.onLoggedIn(undefined, {
-        id: Math.random().toString(36).substring(2, 15),
-        login: login,
-        password: password
+        ssid,
+        password
       });
     }
   }
@@ -36,14 +35,14 @@ function LoginForm(props : LoginFormProps){
       onSubmit={handleSubmit}    
     >
       <div>
-        <label htmlFor="login">Email:</label>
-        <input type="text" name="login" placeholder="login" value={login}
-          onChange={handleInputChange(setLogin)} //generate a function from a function (result = (e)=>setLogin(e.target.value))
+        <label htmlFor="SSID">Email:</label>
+        <input type="text" name="SSID" placeholder="SSID" value={ssid}
+          onChange={handleInputChange(setSsid)} //generate a function from a function (result = (e)=>setLogin(e.target.value))
         />
       </div>
       <div>
         <label htmlFor="password">Password:</label>
-        <input type="password" name="password" placeholder="password"  value={password}
+        <input type="text" name="password" placeholder="password"  value={password}
           onChange={handleInputChange(setPassword)} 
         />
       </div>
@@ -52,4 +51,4 @@ function LoginForm(props : LoginFormProps){
   )
 }
 
-export default LoginForm;
+export default WifiForm;
