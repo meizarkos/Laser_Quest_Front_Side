@@ -46,11 +46,14 @@ function Bluetooth() {
           Connect to ESP32
         </button>
 
-        <WifiForm
-          ssid=""
-          password=""
-          onLoggedIn={onLoggedIn}
-        />
+        {
+          characteristic &&
+          <WifiForm
+            ssid=""
+            password=""
+            onLoggedIn={onLoggedIn}
+          /> 
+        }
       </div>
     );
 }
