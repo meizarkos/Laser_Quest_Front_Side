@@ -1,0 +1,48 @@
+@import '../var/colors.css';
+
+.Bluetooth {
+    position: relative;
+    padding: 0px;
+    font-family: sans-serif;
+    text-align: center;
+  }
+  
+  .top-left {
+    position: absolute;
+    top: 0px;
+    left: 16px;
+  }
+  
+  .top-left a {
+    text-decoration: none;
+    color: white;
+    background-color: #444;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+  }
+  
+  .top-left a:hover {
+    background-color: #222;
+  }
+  
+  .Bluetooth p {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 24px;
+  }
+  
+  .connect-btn {
+    background-color: var(--button-color);
+    color: black;
+    padding: 12px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .connect-btn:hover {
+    background-color: var(--button-hover);
+  }

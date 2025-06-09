@@ -17,11 +17,11 @@ function Bluetooth() {
 
       try {
         await characteristic.writeValue(encoded);
-        console.log('Data sent to ESP32:', dataToSend);
       } catch (err) {
         console.error('Failed to send data:', err);
       }
-    } else {
+    } 
+    else {
       console.warn("Characteristic not connected yet");
     }
   }
@@ -34,28 +34,25 @@ function Bluetooth() {
     };
 
   
-  return (
-    <div className="App">
-      <p>Send data over bluethooth</p>
-      <br/>
-      <br/>
-      <button onClick={handleConnect}>Connect to ESP32</button>
-      <br/>
-      <br/>
-      <WifiForm
-        ssid="wi fi name"
-        password="wi fi password"
-        onLoggedIn={onLoggedIn}
-      />
-      <p>
-        {wifi?.ssid}<br/>
-        {wifi?.password}
-      </p>
-      <button>
-        <a href="/">Go to Home</a>
-      </button>
-    </div>
-  );
+    return (
+      <div className="Bluetooth">
+        <div className="top-left">
+          <a href="/">Go to Home</a>
+        </div>
+    
+        <p>Connect your laser via Bluetooth</p>
+    
+        <button className="connect-btn" onClick={handleConnect}>
+          Connect to ESP32
+        </button>
+
+        <WifiForm
+          ssid=""
+          password=""
+          onLoggedIn={onLoggedIn}
+        />
+      </div>
+    );
 }
 
 export default Bluetooth;
