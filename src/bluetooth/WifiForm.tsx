@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import './WifiForm.css';
 import { IWifi } from './wifi.interface';
+import { toast, ToastContainer } from 'react-toastify';
 
 export interface LoginFormProps {
   ssid?: string;
   password?: string;
-  onLoggedIn?: (error?:Error,user?:IWifi) => void;
+  sendWifiCred?: (error?:Error,user?:IWifi) => void;
 }
 
 function WifiForm(props : LoginFormProps){
@@ -21,12 +22,18 @@ function WifiForm(props : LoginFormProps){
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(props.onLoggedIn){
-      props.onLoggedIn(undefined, {
-        ssid,
-        password
-      });
+    if(ssid === '' || password === ''){
+      toast.error("Please fill in both fields.");
     }
+    else{
+      if(props.sendWifiCred){
+        props.sendWifiCred(undefined, {
+          ssid,
+          password
+        });
+      }
+    }
+    
   }
 
   return (
@@ -49,6 +56,7 @@ function WifiForm(props : LoginFormProps){
         </div>
         <input type="submit" value="Send wifi access to your laser"/>
       </form>
+
     </div>
     
   )

@@ -9,22 +9,16 @@ async function connectToDevice() {
       optionalServices: [SERVICE_UUID], 
     });
 
-    console.log('Device selected:', device.name);
-
     if(!device.gatt) {
       throw new Error('Device does not support GATT');
     }
     const server = await device.gatt?.connect();
 
-    // Get your service
+    // Get your service / characteristic
     const service = await server.getPrimaryService(SERVICE_UUID);
-
-    // Get characteristic (for example, writable characteristic)
     const characteristic = await service?.getCharacteristic(CHARACTERISTIC_UUID);
 
-    console.log('Connected to characteristic');
-
-    return characteristic; // Save it for read/write later
+    return {characteristic,device}; // Save it for read/write later
   } catch (error) {
     console.error('Connection failed', error);
   }

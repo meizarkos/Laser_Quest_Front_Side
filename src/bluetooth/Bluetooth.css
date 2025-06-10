@@ -7,25 +7,6 @@
     text-align: center;
   }
   
-  .top-left {
-    position: absolute;
-    top: 0px;
-    left: 16px;
-  }
-  
-  .top-left a {
-    text-decoration: none;
-    color: white;
-    background-color: #444;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-  }
-  
-  .top-left a:hover {
-    background-color: #222;
-  }
-  
   .Bluetooth p {
     font-size: 1.4rem;
     font-weight: bold;
@@ -46,3 +27,37 @@
   .connect-btn:hover {
     background-color: var(--button-hover);
   }
+
+.loader {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid var(--button-hover);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 30px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.back-btn{
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  text-decoration: none;
+  color: white;
+  background-color: #8b8b8b;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.back-btn:hover {
+  background-color: #222;
+}
+
+
