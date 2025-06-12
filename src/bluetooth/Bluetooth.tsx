@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import './Bluetooth.css';
 import { IWifi } from './wifi.interface';
 import WifiForm from './WifiForm';
@@ -9,14 +9,22 @@ import { useNavigate } from 'react-router-dom';
 
 function Bluetooth() {
   const navigate = useNavigate();
-  const [wifi, setWifi] = useState<IWifi>();
   const [characteristic, setCharacteristic] = useState<BluetoothRemoteGATTCharacteristic | undefined>(undefined);
   const [bluetoothDevice, setBluetoothDevice] = useState<BluetoothDevice | undefined>(undefined);
   const [isConnecting, setIsConnecting] = useState(false);
 
+  useEffect(() => {
+  return () => {
+    // This function runs when the component is about to unmount
+      if (bluetoothDevice?.gatt?.connected) {
+        bluetoothDevice.gatt.disconnect();
+        console.log("Disconnected from Bluetooth device on page leave");
+      }
+    };
+  }, [bluetoothDevice]);
+
 
   const sendWifiCred = async (error?: Error, wifi?: IWifi) =>{
-    setWifi(wifi);
     if (characteristic && wifi) {
       const dataToSend = JSON.stringify(wifi); // Convert the object to JSON
       const encoder = new TextEncoder();
@@ -33,7 +41,7 @@ function Bluetooth() {
     }
   }
 
-  const handleBackClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDisconnect = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (bluetoothDevice?.gatt?.connected) {
@@ -73,7 +81,7 @@ function Bluetooth() {
   return (
     <div className="Bluetooth">
       <div>
-         <button className = "back-btn"onClick={handleBackClick}>Go back home</button>
+         <button className = "back-btn"onClick={handleDisconnect}>Go back home</button>
       </div>
   
       <p>Connect your laser via Bluetooth</p>
