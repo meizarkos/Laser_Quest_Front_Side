@@ -32,6 +32,9 @@ function WifiForm(props : LoginFormProps){
           password
         });
       }
+      toast.info("Sending WiFi credentials to the laser, wait a moment...",{
+        autoClose: false,
+      });
     }
     
   }

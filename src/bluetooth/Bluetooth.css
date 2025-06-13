@@ -60,4 +60,16 @@
   background-color: #222;
 }
 
+.wifi-success {
+  color:  var(--success-text);/* green */
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.wifi-failure {
+  color: var(--error-text); /* red */
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
 
