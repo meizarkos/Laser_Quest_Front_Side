@@ -6,12 +6,16 @@ import { connectToDevice } from './connectToBluetooth';
 import { toast, ToastContainer } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
+const SUCCESS = "Success";
+const FAILURE = "Failure"; 
+
 
 function Bluetooth() {
   const navigate = useNavigate();
   const [characteristic, setCharacteristic] = useState<BluetoothRemoteGATTCharacteristic | undefined>(undefined);
   const [bluetoothDevice, setBluetoothDevice] = useState<BluetoothDevice | undefined>(undefined);
   const [isConnecting, setIsConnecting] = useState(false);
+  const [wifiConnectionState, setWifiConnectionState] = useState<String | undefined>(undefined);
 
   useEffect(() => {
   return () => {
@@ -61,6 +65,18 @@ function Bluetooth() {
       if (result?.characteristic) {
         setCharacteristic(result?.characteristic);
         setBluetoothDevice(result?.device);
+        await result.characteristic.startNotifications();
+        result.characteristic.addEventListener('characteristicvaluechanged', event => {
+          const target = event.target as BluetoothRemoteGATTCharacteristic | null;
+          const value = new TextDecoder().decode(target?.value?.buffer || new ArrayBuffer(0));
+          if( value === SUCCESS){
+            toast.success("Your laser is now connected to the WiFi!");
+          }
+          else{
+            toast.error("Your laser failed to connect to the WiFi. Please check the credentials.");
+          }
+          setWifiConnectionState(value ?? FAILURE);
+        });
         toast.success("Connected to Bluetooth device successfully!");
       }
       else if(characteristic && bluetoothDevice) {
@@ -70,13 +86,13 @@ function Bluetooth() {
         toast.error("Bluetooth connection cancel.");
       }
     } catch (error) {
-      console.log('Connection failed:');
+      console.log(error);
       toast.error("Connection failed. Please try again.") 
     } finally {
       setIsConnecting(false);
     }
   };
-
+  
   
   return (
     <div className="Bluetooth">
@@ -99,6 +115,17 @@ function Bluetooth() {
           sendWifiCred={sendWifiCred}
         /> 
       }
+      {wifiConnectionState === SUCCESS && (
+        <p className="wifi-success">
+          Your laser is now connected to the WiFi!
+        </p>
+      )}
+
+      {wifiConnectionState === FAILURE && (
+        <p className="wifi-failure">
+          Your laser failed to connect to the WiFi. Please check the credentials.
+        </p>
+      )}
       <ToastContainer position="bottom-right" autoClose={4000} hideProgressBar={false} pauseOnHover={false} pauseOnFocusLoss={false} closeOnClick />
     </div>
   );

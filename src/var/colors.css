@@ -2,5 +2,6 @@
     --button-color: #faffd3;
     --button-hover: #f7ebb5;
     --textField-focus: black;
-    --error-text: red;
+    --error-text: #e74c3c;
+    --success-text: #2ecc71;
   }
