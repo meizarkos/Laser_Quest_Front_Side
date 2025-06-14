@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import './WifiForm.css';
 import { IWifi } from './wifi.interface';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
+import TokenStore from '../utils/tokenStore';
 
 export interface LoginFormProps {
   ssid?: string;
@@ -22,14 +23,15 @@ function WifiForm(props : LoginFormProps){
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(ssid === '' || password === ''){
+    if(ssid === '' || password === '' || TokenStore.getToken() === null){
       toast.error("Please fill in both fields.");
     }
     else{
       if(props.sendWifiCred){
         props.sendWifiCred(undefined, {
           ssid,
-          password
+          password,
+          token : TokenStore.getToken()!
         });
       }
       toast.info("Sending WiFi credentials to the laser, wait a moment...",{

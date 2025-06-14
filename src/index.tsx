@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import Bluetooth from './bluetooth/Bluetooth';
+import Management from './management/Management';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -16,6 +17,7 @@ root.render(
         <Route path="/" element={<App />} />
         <Route path='*' element={<Navigate to='/'/>}/>
         <Route path='/bluetooth' element={<Bluetooth/>}/>
+        <Route path='/management' element={<Management/>} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

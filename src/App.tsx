@@ -1,12 +1,9 @@
 import './App.css';
+import ConnectForm from './connection/ConnectForm';
 
 function App() {
   return (
-    <div className="App">
-      <button>
-        <a href="/bluetooth">Go to Bluetooth</a>
-      </button>
-    </div>
+    <ConnectForm />
   );
 }
 
