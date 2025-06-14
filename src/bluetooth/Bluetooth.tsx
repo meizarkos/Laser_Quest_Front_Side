@@ -3,8 +3,9 @@ import './Bluetooth.css';
 import { IWifi } from './wifi.interface';
 import WifiForm from './WifiForm';
 import { connectToDevice } from './connectToBluetooth';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import generateToastContainer from '../var/ToastContainer';
 
 const SUCCESS = "Success";
 const FAILURE = "Failure"; 
@@ -55,7 +56,7 @@ function Bluetooth() {
       console.log("Disconnected before navigating");
     }
     
-    navigate('/');
+    navigate('/management');
   };
 
   const handleConnect = async () => {
@@ -126,7 +127,7 @@ function Bluetooth() {
           Your laser failed to connect to the WiFi. Please check the credentials.
         </p>
       )}
-      <ToastContainer position="bottom-right" autoClose={4000} hideProgressBar={false} pauseOnHover={false} pauseOnFocusLoss={false} closeOnClick />
+      {generateToastContainer()}
     </div>
   );
 }
