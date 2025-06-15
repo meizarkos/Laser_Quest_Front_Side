@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState,useEffect, use } from 'react';
 import './Bluetooth.css';
 import { IWifi } from './wifi.interface';
 import WifiForm from './WifiForm';
@@ -18,14 +18,38 @@ function Bluetooth() {
   const [isConnecting, setIsConnecting] = useState(false);
   const [wifiConnectionState, setWifiConnectionState] = useState<String | undefined>(undefined);
 
+  const handleCharacteristicValueChanged = (event: Event) => {
+    const target = event.target as BluetoothRemoteGATTCharacteristic | null;
+    const value = new TextDecoder().decode(target?.value?.buffer || new ArrayBuffer(0));
+    console.log(`Received value: '${value}' (length: ${value.length})`);
+    if(value === SUCCESS){
+      toast.success("Your laser is now connected to the WiFi!");
+    } else {
+      toast.error("Your laser failed to connect to the WiFi. Please check the credentials.");
+    }
+    setWifiConnectionState(value ?? FAILURE);
+  };
+
   useEffect(() => {
-  return () => {
-    // This function runs when the component is about to unmount
-      if (bluetoothDevice?.gatt?.connected) {
-        bluetoothDevice.gatt.disconnect();
-        console.log("Disconnected from Bluetooth device on page leave");
-      }
+    if (!characteristic) return;
+
+    characteristic.startNotifications().then(() => {
+      characteristic.addEventListener('characteristicvaluechanged', handleCharacteristicValueChanged);
+    });
+
+    return () => {
+      characteristic.removeEventListener('characteristicvaluechanged', handleCharacteristicValueChanged);
     };
+  }, [characteristic]);
+
+  useEffect(() => {
+    return () => {
+      // This function runs when the component is about to unmount
+        if (bluetoothDevice?.gatt?.connected) {
+          bluetoothDevice.gatt.disconnect();
+          console.log("Disconnected from Bluetooth device on page leave");
+        }
+      };
   }, [bluetoothDevice]);
 
 
@@ -46,7 +70,13 @@ function Bluetooth() {
     }
   }
 
-  const handleDisconnect = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDisconnectBle = () => {
+    setCharacteristic(undefined);
+    setBluetoothDevice(undefined);
+    toast.info("Bluetooth device disconnected. Please reconnect.");
+  };
+
+  const handleLeavePage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     if (bluetoothDevice?.gatt?.connected) {
@@ -64,20 +94,12 @@ function Bluetooth() {
     try {
       const result = await connectToDevice();
       if (result?.characteristic) {
-        setCharacteristic(result?.characteristic);
-        setBluetoothDevice(result?.device);
         await result.characteristic.startNotifications();
-        result.characteristic.addEventListener('characteristicvaluechanged', event => {
-          const target = event.target as BluetoothRemoteGATTCharacteristic | null;
-          const value = new TextDecoder().decode(target?.value?.buffer || new ArrayBuffer(0));
-          if( value === SUCCESS){
-            toast.success("Your laser is now connected to the WiFi!");
-          }
-          else{
-            toast.error("Your laser failed to connect to the WiFi. Please check the credentials.");
-          }
-          setWifiConnectionState(value ?? FAILURE);
-        });
+        setCharacteristic(result.characteristic);
+        setBluetoothDevice(result.device);
+        result.device.removeEventListener('gattserverdisconnected', handleDisconnectBle);
+        result.device.addEventListener('gattserverdisconnected', handleDisconnectBle);
+        
         toast.success("Connected to Bluetooth device successfully!");
       }
       else if(characteristic && bluetoothDevice) {
@@ -98,7 +120,7 @@ function Bluetooth() {
   return (
     <div className="Bluetooth">
       <div>
-         <button className = "back-btn"onClick={handleDisconnect}>Go back home</button>
+         <button className = "back-btn"onClick={handleLeavePage}>Go back home</button>
       </div>
   
       <p>Connect your laser via Bluetooth</p>
