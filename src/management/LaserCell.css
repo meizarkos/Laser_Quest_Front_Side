@@ -1,0 +1,74 @@
+.laser-cell {
+  /* your existing styles */
+  position: relative;
+  padding: 10px;
+  border: 1px solid #ddd;
+  margin: 8px;
+  border-radius: 6px;
+}
+
+.loader {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid var(--button-hover);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 30px auto;
+}
+
+/* Animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.status-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.status-icon.success {
+  border-radius: 50%;
+  background-color: #4CAF50; /* green */
+  position: relative;
+}
+
+.status-icon.success::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.status-icon.fail {
+  position: relative;
+}
+
+.status-icon.fail::before,
+.status-icon.fail::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 0;
+  width: 3px;
+  height: 12px;
+  background-color: #F44336; /* red */
+}
+
+.status-icon.fail::before {
+  transform: rotate(45deg);
+}
+
+.status-icon.fail::after {
+  transform: rotate(-45deg);
+}
