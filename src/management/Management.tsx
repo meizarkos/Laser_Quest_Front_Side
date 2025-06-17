@@ -92,7 +92,7 @@ function Mangement() {
           }
           setAllToFail();
           toast.info("Connection to the server timed out. Some lasers may not have been loaded.");
-        }, 3000);
+        }, 30000);
         timeoutIdsRef.current?.push(timeOutId);
 
         let done = false;
