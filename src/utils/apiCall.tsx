@@ -1,5 +1,6 @@
 import TokenStore from './tokenStore';
-export async function apiCall(route : string, verb: string,body : any):Promise<Response> {
+
+export async function apiCall(route : string, verb: string,body : any):Promise<Response | null> {
    const options: RequestInit = {
     method: verb,
     headers: {
@@ -12,5 +13,11 @@ export async function apiCall(route : string, verb: string,body : any):Promise<R
     options.body = JSON.stringify(body);
   }
 
-  return fetch("http://localhost:2999/"+route, options);
+  try {
+    const response = await fetch("http://localhost:2999/" + route, options);
+    return response;
+  } catch (error) {
+    console.error("Network error in apiCall:", error);
+    return null;
+  }
 }

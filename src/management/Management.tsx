@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { apiCall } from '../utils/apiCall';
 import './Management.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { toast } from 'react-toastify';
 import generateToastContainer from '../var/ToastContainer';
 import LaserCell from './LaserCell';
@@ -15,6 +15,8 @@ export interface Laser {
 function Mangement() {
   const navigate = useNavigate();
   const [laserMap, setLaserMap] = useState<Map<string, Laser>>(new Map());
+  const readersRef = useRef<ReadableStreamDefaultReader<Uint8Array>[]>([]);
+  const timeoutIdsRef = useRef<NodeJS.Timeout[]>([]);
 
   function addLaserById(uuid: string) {
     setLaserMap(prev => {
@@ -54,42 +56,70 @@ function Mangement() {
     });
   }
 
+  function cleanAll(){
+    timeoutIdsRef.current.forEach(clearTimeout);
+    timeoutIdsRef.current = [];
+    readersRef.current.forEach(reader => {
+      if(reader) {
+        reader.cancel();
+      }
+    });
+    readersRef.current = [];
+  }
+
+  useEffect(() => {
+    return () => {
+      cleanAll();
+    };
+  }, []);
+
   useEffect(() => {
     async function fetchSSE() {
-      const response = await apiCall('user/lasers', 'GET', null);
-      if (!response || !response.ok || !response.body) {
-        toast.error("Failed to connect to the server. Please try again later.");
-        return;
-      }
-      const reader = response?.body.getReader();
-      const decoder = new TextDecoder();
-
-      setTimeout(() => {
-        if (reader) {
-          reader.cancel();
+      try{
+        const response = await apiCall('user/lasers', 'GET', null);
+        if (!response || typeof response !== 'object' || !response.ok || !response.body) {
+          toast.error("Failed to connect to the server. Please try again later.");
+          return;
         }
-        setAllToFail();
-        toast.info("Done.");
-      }, 30000);
 
-      let done = false;
-      while (!done) {
-        const { value, done: doneReading } = await reader.read();
-        done = doneReading;
-        if (value) {
-          const chunk = decoder.decode(value, { stream: true });
-          try {
-            const data = JSON.parse(chunk);
-            if (data?.lasers && Array.isArray(data?.lasers)) {
-              addLasersByIds(data.lasers);
-            } else if(data?.uuid){
-              addLaserById(data.uuid);
+        const reader = response.body.getReader();
+        readersRef.current.push(reader);
+        const decoder = new TextDecoder(); 
+
+        const timeOutId = setTimeout(() => {
+          if (reader) {
+            reader.cancel();
+          }
+          setAllToFail();
+          toast.info("Connection to the server timed out. Some lasers may not have been loaded.");
+        }, 3000);
+        timeoutIdsRef.current?.push(timeOutId);
+
+        let done = false;
+        while (!done) {
+          const { value, done: doneReading } = await reader.read();
+          done = doneReading;
+          if (value) {
+            const chunk = decoder.decode(value, { stream: true });
+            try {
+              const data = JSON.parse(chunk);
+              if (data?.lasers && Array.isArray(data?.lasers)) {
+                addLasersByIds(data.lasers);
+              } else if(data?.uuid){
+                addLaserById(data.uuid);
+              }
+            } catch (error) {
+              console.error("Error parsing JSON:", error);
+              toast.error("Error parsing server response.");
             }
-          } catch (error) {
-            console.error("Error parsing JSON:", error);
-            toast.error("Error parsing server response.");
           }
         }
+      }
+      catch (error) {
+        toast.error("Failed to fetch data from the server. Please try again later.");
+        setAllToFail();
+        timeoutIdsRef.current.forEach(clearTimeout);
+        timeoutIdsRef.current = [];
       }
     }
     fetchSSE();
