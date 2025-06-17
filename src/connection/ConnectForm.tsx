@@ -28,7 +28,7 @@ function ConnectForm(){
         password,
       })
 
-      if (response.ok) {
+      if (response?.ok) {
         const data = await response.json();
         TokenStore.setToken(data.token);
         navigate('/management');
