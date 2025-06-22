@@ -1,5 +1,5 @@
 .ble-btn{
-  position: absolute;
+  position: static;
   top: 10px;
   right: 16px;
   text-decoration: none;
@@ -13,4 +13,30 @@
 
 .ble-btn:hover {
   background-color: var(--direction-button-hover);
+}
+
+.game-btn {
+  position: static;
+  top: 10px;
+  right: 180px;
+  text-decoration: none;
+  color: white;
+  background-color: var(--direction-button);
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.game-btn:hover {
+  background-color: var(--direction-button-hover);
+}
+
+.buttons-management {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  position: absolute;
+  top: 10px;
+  right: 16px;
 }

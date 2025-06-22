@@ -1,0 +1,87 @@
+.player-form {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  transition: background-color 0.5s ease;
+  box-sizing: border-box;
+}
+
+.player-content {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2rem 3rem;
+  border-radius: 15px;
+  backdrop-filter: blur(5px);
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.player-name {
+  font-size: 4rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  margin-bottom: 1rem;
+  min-height: 60px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.name-input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 1.2rem;
+  text-align: center;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.name-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.name-input:focus {
+  outline: 2px solid white;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.color-palette {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.color-swatch {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.color-swatch:hover {
+  transform: scale(1.15);
+}
+
+.color-swatch.selected {
+  border-color: white;
+  transform: scale(1.2);
+}
+
+.color-swatch.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  filter: grayscale(80%);
+}
+
+.color-swatch.disabled:hover {
+  transform: scale(1);
+}

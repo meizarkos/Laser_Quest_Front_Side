@@ -77,11 +77,17 @@ function Mangement() {
     async function fetchSSE() {
       try{
         const response = await apiCall('user/lasers', 'GET', null);
-        if (!response || typeof response !== 'object' || !response.ok || !response.body) {
-          toast.error("Failed to connect to the server. Please try again later.");
+
+        if (response!.status !== 200) {
+          toast.error("Failed to fetch data from the server. Please try again later.");
           return;
         }
 
+        else if (!response || typeof response !== 'object' || !response.ok || !response.body) {
+          toast.error("Failed to connect to the server. Please try again later.");
+          return;
+        }
+        
         const reader = response.body.getReader();
         readersRef.current.push(reader);
         const decoder = new TextDecoder(); 
@@ -130,10 +136,16 @@ function Mangement() {
     navigate('/bluetooth');
   }
 
+  const handleGoToGame = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    navigate('/setup-game');
+  }
+
   return (
     <div>
-      <div>
-         <button className = "ble-btn"onClick={handleGoToBleetooth}>Connect a new device</button>
+      <div className='buttons-management'>
+         <button className = "ble-btn" onClick={handleGoToBleetooth}>Connect a new device</button>
+         <button className = "game-btn" onClick={handleGoToGame}>Start a new game</button>
       </div>
       <h1>Management</h1>
       { laserMap.size > 0 ? (
