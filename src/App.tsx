@@ -2,7 +2,6 @@ import './App.css';
 import ConnectForm from './connection/ConnectForm';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TokenStore from './utils/tokenStore';
 
 function App() {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useLocation, Navigate, useNavigate } from "react-router-dom";
 import { toast } from 'react-toastify';
 import { io, Socket } from 'socket.io-client';
@@ -8,6 +8,7 @@ import generateToastContainer from '../var/ToastContainer';
 import Game from "../models/game";
 import Color from "../models/color";
 import Player from "../models/player";
+import InviteForm from './InviteForm';
 import './Game.css';
 
 const GameApp: React.FC = () => {
@@ -29,10 +30,11 @@ const GameApp: React.FC = () => {
   const [accessDenied, setAccessDenied] = useState(false);
   const [gameStopped, setGameStopped] = useState(false);
   const [showInviteForm, setShowInviteForm] = useState(false);
-  const [inviteName, setInviteName] = useState('');
-  const [inviteColor, setInviteColor] = useState('');
   const [inviteLoading, setInviteLoading] = useState(false);
   const [loadingGameData, setLoadingGameData] = useState(false);
+  const [lasers, setLasers] = useState<string[]>([]);
+  const [loadingLasers, setLoadingLasers] = useState(false);
+  const hasFetchedLasers = useRef(false);
 
   const navigate = useNavigate();
   const isGuest = !TokenStore.getToken();
@@ -243,11 +245,9 @@ const GameApp: React.FC = () => {
   };
 
   const usedColors = gameData ? gameData.players.map(p => p.color.hitColor) : [];
-  const GAME_COLORS = ['red', 'green', 'blue', 'yellow', 'white'];
 
-  const handleInviteSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inviteName.trim() || !inviteColor) return;
+  const handleInviteSubmit = async (name: string, color: string) => {
+    if (!name.trim() || !color) return;
     setInviteLoading(true);
     try {
       const response = await apiCall(`game/get-game/${id}`, 'GET', undefined);
@@ -262,13 +262,13 @@ const GameApp: React.FC = () => {
         return;
       }
 
-      if (currentGame.players.some((p: Player) => p.color.hitColor === inviteColor)) {
+      if (currentGame.players.some((p: Player) => p.color.hitColor === color)) {
         toast.error('This color is already take');
         setInviteLoading(false);
         return;
       }
 
-      const newPlayer = { name: inviteName, color: { hitColor: inviteColor } };
+      const newPlayer = { name, color: { hitColor: color } };
       const addPlayerRes = await apiCall('game/add-player', 'POST', { gameId: id, player: newPlayer });
       let updatedGameData = currentGame;
 
@@ -284,7 +284,7 @@ const GameApp: React.FC = () => {
 
       localStorage.setItem('lq_game_id', id!);
       localStorage.setItem('lq_game_data', JSON.stringify(updatedGameData));
-      localStorage.setItem('lq_player_name', inviteName);
+      localStorage.setItem('lq_player_name', name);
       window.location.href = `/game/${id}`;
     }
     catch (e) {
@@ -323,6 +323,39 @@ const GameApp: React.FC = () => {
       return () => { socket.off('scoreUpdated', handleScoreUpdated); };
     }
   }, [id, socket]);
+
+  useEffect(() => {
+    // On ne fetch qu'une fois
+    if (!showInviteForm || hasFetchedLasers.current) return;
+    hasFetchedLasers.current = true;
+    const fetchLasers = async () => {
+      setLoadingLasers(true);
+      try {
+        const response = await apiCall('user/lasers', 'GET', null);
+        if (response && response.ok && response.body) {
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          let done = false;
+          while (!done) {
+            const { value, done: doneReading } = await reader.read();
+            done = doneReading;
+            if (value) {
+              const chunk = decoder.decode(value, { stream: true });
+              try {
+                const data = JSON.parse(chunk);
+                if (data?.lasers && Array.isArray(data.lasers)) {
+                  setLasers(data.lasers);
+                  break;
+                }
+              } catch (e) {}
+            }
+          }
+        }
+      } catch (e) {}
+      setLoadingLasers(false);
+    };
+    fetchLasers();
+  }, [showInviteForm]);
 
   if (accessDenied && !(isInvite && showInviteForm)) {
     return (
@@ -374,33 +407,12 @@ const GameApp: React.FC = () => {
       )}
       {showInviteForm && !localStorage.getItem('lq_game_id') && gameData && (
         <div className="invite-form-modal">
-          <form className="invite-form" onSubmit={handleInviteSubmit}>
-            <h2>Join game</h2>
-            <input
-              type="text"
-              placeholder="Votre nom"
-              value={inviteName}
-              onChange={e => setInviteName(e.target.value)}
-              maxLength={15}
-              required
-            />
-            <div className="color-palette">
-              {GAME_COLORS.map(color => {
-                const isUsed = usedColors.includes(color);
-                return (
-                  <div
-                    key={color}
-                    className={`color-swatch${inviteColor === color ? ' selected' : ''}${isUsed ? ' disabled' : ''}`}
-                    style={{ backgroundColor: color }}
-                    onClick={() => !isUsed && setInviteColor(color)}
-                  />
-                );
-              })}
-            </div>
-            <button type="submit" disabled={!inviteName.trim() || !inviteColor || inviteLoading}>
-              {inviteLoading ? 'Connexion...' : 'Rejoindre'}
-            </button>
-          </form>
+          <InviteForm
+            onSubmit={handleInviteSubmit}
+            usedColors={usedColors}
+            loading={inviteLoading}
+            showBluetoothSection={!TokenStore.getToken() || (!loadingLasers && lasers.length === 0)}
+          />
         </div>
       )}
       <div className={`game-players-area layout-${gameData ? gameData.players.length : 0}`}>
@@ -424,4 +436,4 @@ const GameApp: React.FC = () => {
   );
 };
 
-export default GameApp; 
+export default GameApp;

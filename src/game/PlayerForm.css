@@ -85,3 +85,23 @@
 .color-swatch.disabled:hover {
   transform: scale(1);
 }
+
+.laser-select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fff;
+  color: #222;
+  border: 1px solid #ccc;
+  margin-top: 0.5rem;
+  z-index: 1001;
+  pointer-events: auto;
+  position: relative;
+}
+
+.laser-select:disabled {
+  background: #eee;
+  color: #aaa;
+  cursor: not-allowed;
+}

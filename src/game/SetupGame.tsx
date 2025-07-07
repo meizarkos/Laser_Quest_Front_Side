@@ -14,7 +14,7 @@ type LocalPlayer = Player & { localId: number };
 const Game: React.FC = () => {
   const navigate = useNavigate();
   const [players, setPlayers] = useState<LocalPlayer[]>([
-    { localId: Date.now(), name: '', color: { hitColor: DEFAULT_COLOR } }
+    { localId: Date.now(), name: '', color: { hitColor: DEFAULT_COLOR }, laserId: '' }
   ]);
 
   const handleAddPlayer = () => {
@@ -22,7 +22,7 @@ const Game: React.FC = () => {
     const availableColor = GAME_COLORS.find(c => !players.map(p => p.color.hitColor).includes(c));
     setPlayers(prevPlayers => [
       ...prevPlayers,
-      { localId: Date.now() + Math.random(), name: '', color: { hitColor: availableColor || DEFAULT_COLOR } }
+      { localId: Date.now() + Math.random(), name: '', color: { hitColor: availableColor || DEFAULT_COLOR }, laserId: '' }
     ]);
   }
 
@@ -34,7 +34,7 @@ const Game: React.FC = () => {
 
   const handleStartGame = async () => {
     const payload = {
-      players: players.map(({ name, color }) => ({ name, color }))
+      players: players.map(({ name, color, laserId }) => ({ name, color, laserId }))
     }
 
     try {
@@ -59,7 +59,7 @@ const Game: React.FC = () => {
   }
 
   const selectedColors = players.map(p => p.color.hitColor).filter(c => GAME_COLORS.includes(c));
-  const isGameReady = players.length > 0 && players.every(p => p.name.trim() !== '' && GAME_COLORS.includes(p.color.hitColor));
+  const isGameReady = players.length > 0 && players.every(p => p.name.trim() !== '' && GAME_COLORS.includes(p.color.hitColor) && p.laserId);
 
   return (
     <div className="game-container">

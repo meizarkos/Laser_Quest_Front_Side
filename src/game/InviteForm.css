@@ -1,0 +1,367 @@
+@import '../var/colors.css';
+
+.invite-form {
+  background: #181c24;
+  padding: 2.5rem 2rem 2rem;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 340px;
+  max-width: 420px;
+  max-height: 95vh;
+  overflow-y: auto;
+  border: 1.5px solid #23283a;
+}
+
+.invite-form h2 {
+  color: #fff;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.invite-form h3 {
+  color: #fff;
+  margin-bottom: 1.2rem;
+  font-size: 1.25rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.invite-form h4 {
+  color: #fff;
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.invite-form p {
+  color: #bfc7d5;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.bluetooth-section {
+  width: 100%;
+  margin-bottom: 2.2rem;
+  padding: 1.5rem 1rem 1.2rem 1rem;
+  background: rgba(30, 34, 44, 0.95);
+  border-radius: 14px;
+  border: 1.5px solid #23283a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bluetooth-connect-btn {
+  width: 100%;
+  padding: 0.9rem;
+  background: linear-gradient(90deg, #1976d2 60%, #1565c0 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.10);
+}
+
+.bluetooth-connect-btn:hover:not(:disabled),
+.bluetooth-connect-btn:focus {
+  background: linear-gradient(90deg, #1565c0 60%, #1976d2 100%);
+  outline: 2px solid #1976d2;
+}
+
+.bluetooth-connect-btn:disabled {
+  background-color: #444a5a;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.wifi-form-section {
+  margin-top: 1.2rem;
+  padding-top: 1.2rem;
+  border-top: 1.5px solid #23283a;
+  width: 100%;
+}
+
+.wifi-form-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.wifi-form-section input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1.5px solid #23283a;
+  border-radius: 8px;
+  background: #23283a;
+  font-size: 1rem;
+  color: #fff;
+  box-sizing: border-box;
+  margin-bottom: 0.2rem;
+  transition: border 0.2s, background 0.2s;
+}
+
+.wifi-form-section input:focus {
+  outline: none;
+  border: 1.5px solid #1976d2;
+  background: #222a38;
+}
+
+.wifi-form-section input::placeholder {
+  color: #bfc7d5;
+  opacity: 0.8;
+}
+
+.wifi-submit-btn {
+  padding: 0.8rem;
+  background: linear-gradient(90deg, #2ecc71 60%, #27ae60 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.08rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 0.2rem;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(46, 204, 113, 0.10);
+}
+
+.wifi-submit-btn:hover:not(:disabled),
+.wifi-submit-btn:focus {
+  background: linear-gradient(90deg, #27ae60 60%, #2ecc71 100%);
+  outline: 2px solid #2ecc71;
+}
+
+.wifi-submit-btn:disabled {
+  background-color: #444a5a;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.wifi-success {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: rgba(46, 204, 113, 0.13);
+  border: 1.5px solid #2ecc71;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.wifi-success p {
+  color: #2ecc71;
+  margin: 0;
+  font-weight: 600;
+}
+
+.wifi-failure {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: rgba(231, 76, 60, 0.13);
+  border: 1.5px solid #e74c3c;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.wifi-failure p {
+  color: #e74c3c;
+  margin: 0;
+  font-weight: 600;
+}
+
+.player-form-section {
+  width: 100%;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.player-form-section form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.player-form-section input[type="text"] {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1.5rem;
+  border: 1.5px solid #23283a;
+  border-radius: 8px;
+  background: #23283a;
+  font-size: 1.08rem;
+  box-sizing: border-box;
+  transition: border 0.2s, background 0.2s;
+}
+
+.player-form-section input[type="text"]:focus {
+  outline: none;
+  border: 1.5px solid #1976d2;
+  background: #222a38;
+}
+
+.player-form-section input::placeholder {
+  opacity: 0.8;
+}
+
+.color-palette {
+  display: flex;
+  justify-content: center;
+  gap: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.color-swatch {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: transform 0.2s, border-color 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+.color-swatch:hover {
+  transform: scale(1.13);
+  border-color: #fff;
+}
+
+.color-swatch.selected {
+  border-color: #fff;
+  transform: scale(1.18);
+}
+
+.color-swatch.disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  filter: grayscale(80%);
+}
+
+.color-swatch.disabled:hover {
+  transform: scale(1);
+  border-color: transparent;
+}
+
+.player-form-section button[type="submit"] {
+  margin-top: 1rem;
+  padding: 0.8rem 2.2rem;
+  border-radius: 50px;
+  border: none;
+  background: linear-gradient(90deg, #2ecc71 60%, #27ae60 100%);
+  color: #fff;
+  font-size: 1.13rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(46,204,113,0.13);
+  transition: background 0.3s, outline 0.2s;
+  min-width: 160px;
+}
+
+.player-form-section button[type="submit"]:hover:not(:disabled),
+.player-form-section button[type="submit"]:focus {
+  background: linear-gradient(90deg, #27ae60 60%, #2ecc71 100%);
+  outline: 2px solid #2ecc71;
+}
+
+.player-form-section button[type="submit"]:disabled {
+  background-color: #444a5a;
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .invite-form {
+    min-width: 95vw;
+    max-width: 99vw;
+    padding: 1.5rem 0.5rem 1.5rem 0.5rem;
+  }
+  .bluetooth-section {
+    padding: 1rem 0.5rem 1rem 0.5rem;
+  }
+  .color-palette {
+    gap: 0.7rem;
+  }
+  .color-swatch {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  z-index: 3000;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-laser-config {
+  background: #181c24;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+  padding: 2.2rem 1.5rem 1.5rem 1.5rem;
+  min-width: 320px;
+  max-width: 95vw;
+  max-height: 95vh;
+  overflow-y: auto;
+  position: relative;
+  border: 1.5px solid #23283a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10;
+  transition: color 0.2s;
+  line-height: 1;
+}
+.modal-close-btn:hover {
+  color: #e74c3c;
+}
+
+@media (max-width: 600px) {
+  .modal-laser-config {
+    min-width: 90vw;
+    padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+  }
+  .modal-close-btn {
+    top: 8px;
+    right: 10px;
+    font-size: 1.7rem;
+  }
+} 
