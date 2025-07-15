@@ -14,7 +14,7 @@ export async function apiCall(route : string, verb: string,body : any):Promise<R
   }
 
   try {
-    const response = await fetch("http://localhost:2999/" + route, options);
+    const response = await fetch("http://145.223.34.159:3010/" + route, options);
     return response;
   } catch (error) {
     console.error("Network error in apiCall:", error);

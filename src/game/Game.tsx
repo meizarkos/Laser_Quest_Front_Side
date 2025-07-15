@@ -47,7 +47,7 @@ const GameApp: React.FC = () => {
 
   useEffect(() => {
     if (id && gameData) {
-      const newSocket = io('http://localhost:2999');
+      const newSocket = io('http://145.223.34.159:3010');
       setSocket(newSocket);
       newSocket.emit('joinGame', id);
 
